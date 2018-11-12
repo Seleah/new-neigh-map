@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Afuri",
+    "street": "923 SE 7th Ave",
+    "city": "Portland",
+    "state": "OR",
+    "zip": "97214",
+    "url": "http://afuri.us/",
+    "pos": {"lat":45.51868,"lng":-122.6645677}
+  },
+  {
+    "name": "AFURI Ramen + Dumpling",
+    "street": "50 SW 3rd Ave",
+    "city": "Portland",
+    "state": "OR",
+    "zip": "97204",
+    "url": "http://afuriramenanddumpling.com/",
+    "pos": {"lat":45.5223477,"lng":-122.6774103}
+  }
+]

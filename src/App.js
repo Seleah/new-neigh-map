@@ -1,28 +1,28 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import locations from './data/locations.json';
+import MapDisplay from './components/MapDisplay';
 import './App.css';
 
-class App extends Component {
+class NeighApp extends Component {
+  state = {
+    lat: 45.52345,
+    lon: -122.67621,
+    zoom: 13,
+    all: locations
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <header>Neighborhood Map</header>
+        <MapDisplay
+        lat={this.state.lat}
+          lon={this.state.lon}
+          zoom={this.state.zoom}
+          locations={this.state.all}/>
       </div>
     );
   }
 }
 
-export default App;
+export default NeighApp;
