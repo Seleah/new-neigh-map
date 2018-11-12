@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import locations from './data/locations.json';
 import MapDisplay from './components/MapDisplay';
+import Header from './components/Header';
 import './App.css';
 
 class NeighApp extends Component {
@@ -14,7 +15,7 @@ class NeighApp extends Component {
   render() {
     return (
       <div className="App">
-        <header>Neighborhood Map</header>
+        <Header/>
         <MapDisplay
         lat={this.state.lat}
           lon={this.state.lon}
