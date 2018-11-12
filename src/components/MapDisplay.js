@@ -47,6 +47,7 @@ class MapDisplay extends React.Component {
 
     return (
       <Map
+        id="map"
         google={this.props.google}
         zoom={this.props.zoom}
         style={style}

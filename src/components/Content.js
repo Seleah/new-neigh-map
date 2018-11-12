@@ -13,7 +13,7 @@ export default class Content extends React.Component {
 
   render = () => {
     return (
-      <div>
+      <div id="content">
         <List />
         <MapDisplay
           lat={this.state.lat}
