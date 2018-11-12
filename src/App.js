@@ -7,8 +7,8 @@ class NeighApp extends Component {
   render() {
     return (
       <div className="App">
-        <Header/>
-        <Content/>
+        <Header />
+        <Content />
       </div>
     );
   }

@@ -54,7 +54,7 @@ class MapDisplay extends React.Component {
         role="application"
         aria-label="map"
         onReady={this.mapReady}
-        onClick={this.closeInfoWindow}/>
+        onClick={this.closeInfoWindow} />
 
         // <Marker onClick={this.onMarkerClick}
         //         name={'Current location'} />

@@ -1,6 +1,7 @@
 import React from 'react';
 import locations from '../data/locations.json';
 import MapDisplay from './MapDisplay';
+import List from './List';
 
 export default class Content extends React.Component {
   state = {
@@ -12,11 +13,14 @@ export default class Content extends React.Component {
 
   render = () => {
     return (
-      <MapDisplay
-        lat={this.state.lat}
-        lon={this.state.lon}
-        zoom={this.state.zoom}
-        locations={this.state.all}/>
+      <div>
+        <List />
+        <MapDisplay
+          lat={this.state.lat}
+          lon={this.state.lon}
+          zoom={this.state.zoom}
+          locations={this.state.all} />
+      </div>
     );
   }
 }
