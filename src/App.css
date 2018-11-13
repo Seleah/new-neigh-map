@@ -4,7 +4,7 @@
 }
 
 #map {
-  width: 60%;
+  max-width: 60%;
 }
 
 #list {
@@ -21,7 +21,11 @@
 }
 
 #list ul li {
-  line-height: 1.5;
+  margin: 20px 0;
+}
+
+#list ul li p {
+  margin: 0;
 }
 
 /*#content {
