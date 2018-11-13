@@ -11,14 +11,23 @@ class MapDisplay extends React.Component {
       locMarkerProps: [],
       activeMarker: null,
       activeMarkerProps: null,
-      showingInfoWindow: false,
-      locations: this.props.locations
+      showingInfoWindow: false
+      // locations: this.props.locations
   };
 
   componentDidMount = () => {
   }
 
-  updateMarkers = (locations) => {
+  mapReady = (props, map) => {
+    // console.log(this.props.locations);
+    this.setState({map});
+    setTimeout(function afterTwoSeconds() {
+      console.log('2')
+    }, 5000)
+    this.updateMarkers(this.props.locations, map);
+  }
+
+  updateMarkers = (locations, m) => {
     if (!locations) {
       return;
     }
@@ -52,9 +61,11 @@ class MapDisplay extends React.Component {
           lng: location.venue.location.lng
         },
         map: this.state.map,
+        title: location.venue.name,
         defaultAnimation
       });
       console.log(marker);
+
 
       // let toggleBounce = () => {
       //   if (marker.getAnimation() !== null) {
@@ -65,7 +76,7 @@ class MapDisplay extends React.Component {
       // }
 
       marker.addListener('click', () => {
-        this.onMarkerClick(locMarkerProps, marker, null);
+        this.onMarkerClick(locMarkerProps, marker, m, null);
         // toggleBounce();
       });
 
@@ -77,10 +88,23 @@ class MapDisplay extends React.Component {
 
   }
 
-  mapReady = (props, map) => {
-      // console.log(this.props.locations);
-      this.setState({map});
-      this.updateMarkers(this.props.locations);
+  onMarkerClick = (props, marker, map, e) => {
+    // Close all open infoWindows
+    this.closeInfoWindow();
+
+    console.log('marker clicked:', marker.title);
+
+    let infowindow = new this.props.google.maps.InfoWindow({
+      content: marker.title
+    });
+
+    infowindow.open(map, marker);
+
+    this.setState({
+      showingInfoWindow: true,
+      activeMarker: marker,
+      activeMarkerProps: props
+    });
   }
 
   closeInfoWindow = () => {

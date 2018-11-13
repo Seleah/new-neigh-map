@@ -21,10 +21,10 @@ export default class Content extends React.Component {
       <div id="content">
         <List locations={this.state.locations} />
         <MapDisplay
+          locations={this.state.locations}
           lat={this.state.lat}
           lon={this.state.lon}
-          zoom={this.state.zoom}
-          locations={this.state.locations} />
+          zoom={this.state.zoom} />
       </div>
     );
   }
