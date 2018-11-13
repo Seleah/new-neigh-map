@@ -1,5 +1,4 @@
 import React from 'react';
-import locations from '../data/locations.json';
 import MapDisplay from './MapDisplay';
 import List from './List';
 import * as LocationsAPI from '../api/Locations';

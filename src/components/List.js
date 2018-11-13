@@ -13,7 +13,7 @@ export default class List extends React.Component {
           {
             locations.map(loc => (
               <li key={loc.venue.id}>
-                <a href={loc.venue.url}>{loc.venue.name}</a>
+                <a href="#"><h3>{loc.venue.name}</h3></a>
                 <p>{loc.venue.location.address}</p>
               </li>
             ))

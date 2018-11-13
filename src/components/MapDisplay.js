@@ -1,6 +1,5 @@
 import React from 'react';
 import {Map, GoogleApiWrapper} from 'google-maps-react';
-import locations from '../data/locations.json';
 
 const MAP_KEY = "AIzaSyCc2VyH-lnIua2RIpDWV0R1ApxNv-T9jyo";
 
@@ -12,7 +11,8 @@ class MapDisplay extends React.Component {
       locMarkerProps: [],
       activeMarker: null,
       activeMarkerProps: null,
-      showingInfoWindow: false
+      showingInfoWindow: false,
+      locations: this.props.locations
   };
 
   componentDidMount = () => {
@@ -23,6 +23,8 @@ class MapDisplay extends React.Component {
       return;
     }
 
+    console.log('These are the locations sent to updateMarkers()', locations);
+
     // For any existing markers remove them from the map
     this.state.locMarkers.forEach(marker => marker.setMap(null));
 
@@ -32,19 +34,27 @@ class MapDisplay extends React.Component {
       let locProps = {
         key: index,
         index,
-        name: location.name,
-        position: location.pos,
-        url: location.url
+        name: location.venue.name,
+        position: {
+          lat: location.venue.location.lat,
+          lng: location.venue.location.lng
+        },
+        url: null
       };
+      // console.log(locProps);
       // add the props to the locMarkerProps list
       locMarkerProps.push(locProps);
 
       let defaultAnimation = this.props.google.maps.Animation.DROP;
       let marker = new this.props.google.maps.Marker({
-        position: location.pos,
+        position: {
+          lat: location.venue.location.lat,
+          lng: location.venue.location.lng
+        },
         map: this.state.map,
         defaultAnimation
       });
+      console.log(marker);
 
       // let toggleBounce = () => {
       //   if (marker.getAnimation() !== null) {
@@ -59,6 +69,7 @@ class MapDisplay extends React.Component {
         // toggleBounce();
       });
 
+      console.log(marker);
       return marker;
     })
 
@@ -67,7 +78,7 @@ class MapDisplay extends React.Component {
   }
 
   mapReady = (props, map) => {
-      console.log(this.props.locations);
+      // console.log(this.props.locations);
       this.setState({map});
       this.updateMarkers(this.props.locations);
   }
