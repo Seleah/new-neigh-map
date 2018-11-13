@@ -19,6 +19,7 @@ class MapDisplay extends React.Component {
   componentDidMount = () => {
   }
 
+  // code snippet from Doug Brown, Project Coach after a plea for help via Slack. Thanks so much!!
   componentWillReceiveProps = props => {
     this.updateMarkers(props.locations, this.state.map);
   }
