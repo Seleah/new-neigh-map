@@ -8,8 +8,8 @@ class MapDisplay extends React.Component {
   state = {
   // initialize map
       map: null,
-      markers: [],
-      markerProps: [],
+      locMarkers: [],
+      locMarkerProps: [],
       activeMarker: null,
       activeMarkerProps: null,
       showingInfoWindow: false
@@ -18,10 +18,58 @@ class MapDisplay extends React.Component {
   componentDidMount = () => {
   }
 
+  updateMarkers = (locations) => {
+    if (!locations) {
+      return;
+    }
+
+    // For any existing markers remove them from the map
+    this.state.locMarkers.forEach(marker => marker.setMap(null));
+
+    // create two lists, locMarkerProps and locMarkers, where for each location, a marker object is created with the properties of that marker (locProps), an animation, and a click eventListener
+    let locMarkerProps = [];
+    let locMarkers = locations.map((location, index) => {
+      let locProps = {
+        key: index,
+        index,
+        name: location.name,
+        position: location.pos,
+        url: location.url
+      };
+      // add the props to the locMarkerProps list
+      locMarkerProps.push(locProps);
+
+      let defaultAnimation = this.props.google.maps.Animation.DROP;
+      let marker = new this.props.google.maps.Marker({
+        position: location.pos,
+        map: this.state.map,
+        defaultAnimation
+      });
+
+      // let toggleBounce = () => {
+      //   if (marker.getAnimation() !== null) {
+      //     marker.setAnimation(null);
+      //   } else {
+      //     marker.setAnimation(this.props.google.maps.Animation.BOUNCE);
+      //   }
+      // }
+
+      marker.addListener('click', () => {
+        this.onMarkerClick(locMarkerProps, marker, null);
+        // toggleBounce();
+      });
+
+      return marker;
+    })
+
+    this.setState({locMarkers, locMarkerProps});
+
+  }
+
   mapReady = (props, map) => {
-      console.log(props.locations);
+      console.log(this.props.locations);
       this.setState({map});
-      // this.updateMarkers(this.props.locations);
+      this.updateMarkers(this.props.locations);
   }
 
   closeInfoWindow = () => {

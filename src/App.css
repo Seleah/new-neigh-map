@@ -20,6 +20,10 @@
   text-align: left;
 }
 
+#list ul li {
+  line-height: 1.5;
+}
+
 /*#content {
   display: flex;
   flex: row wrap;

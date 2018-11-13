@@ -6,7 +6,7 @@
     "state": "OR",
     "zip": "97214",
     "url": "http://afuri.us/",
-    "pos": {"lat":45.51868,"lng":-122.6645677}
+    "pos": {"lat":45.51603963490883,"lng":-122.65891199654608}
   },
   {
     "name": "AFURI Ramen + Dumpling",
@@ -15,6 +15,6 @@
     "state": "OR",
     "zip": "97204",
     "url": "http://afuriramenanddumpling.com/",
-    "pos": {"lat":45.5223477,"lng":-122.6774103}
+    "pos": {"lat":45.52238136490257,"lng":-122.67320220356706}
   }
 ]
