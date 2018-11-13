@@ -1,5 +1,6 @@
 import React from 'react';
-import {Map, GoogleApiWrapper} from 'google-maps-react';
+import {Map, GoogleApiWrapper, Marker} from 'google-maps-react';
+import * as LocationsAPI from '../api/Locations';
 
 const MAP_KEY = "AIzaSyCc2VyH-lnIua2RIpDWV0R1ApxNv-T9jyo";
 
@@ -11,26 +12,30 @@ class MapDisplay extends React.Component {
       locMarkerProps: [],
       activeMarker: null,
       activeMarkerProps: null,
-      showingInfoWindow: false
-      // locations: this.props.locations
+      showingInfoWindow: false,
+      locations: this.props.locations
   };
 
   componentDidMount = () => {
   }
 
+  componentWillReceiveProps = props => {
+    this.updateMarkers(props.locations, this.state.map);
+  }
+
   mapReady = (props, map) => {
     // console.log(this.props.locations);
     this.setState({map});
-    setTimeout(function afterTwoSeconds() {
-      console.log('2')
-    }, 5000)
+
     this.updateMarkers(this.props.locations, map);
   }
 
   updateMarkers = (locations, m) => {
-    if (!locations) {
-      return;
-    }
+    // if (!locations) {
+    //   // return;
+    //   LocationsAPI.getLocations()
+    //   .then(resp => this.setState({ locations: resp }));
+    // }
 
     console.log('These are the locations sent to updateMarkers()', locations);
 
@@ -139,6 +144,7 @@ class MapDisplay extends React.Component {
         aria-label="map"
         onReady={this.mapReady}
         onClick={this.closeInfoWindow} />
+
 
         // <Marker onClick={this.onMarkerClick}
         //         name={'Current location'} />
