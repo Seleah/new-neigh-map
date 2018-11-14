@@ -82,6 +82,9 @@ export default class Content extends React.Component {
     this.setState({ query: queryNew });
     LocationsAPI.getLocations(this.state.query)
     .then(resp => this.setState({ locations: resp }));
+    // if (this.state.locations === "Your search cannot be completed due to an error") {
+
+    // }
     console.log(this.state.query);
   }
 

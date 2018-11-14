@@ -38,7 +38,7 @@ class MapDisplay extends React.Component {
   }
 
   updateMarkers = (locations, locate, m) => {
-    if (locate != locations) {
+    if ((locate != locations) || (this.state.locations !== "Your search cannot be completed due to an error")) {
       // if (!locations) {
       //   // return;
       //   LocationsAPI.getLocations()
@@ -109,6 +109,8 @@ class MapDisplay extends React.Component {
       });
 
       window.markers = locMarkers;
+    } else {
+      return;
     }
 
   }

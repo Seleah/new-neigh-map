@@ -12,16 +12,19 @@ export default class List extends React.Component {
         <input type="text" placeholder="Search" value={this.props.querySearch} onChange={(e) => this.props.handleChange(e.target.value)}/>
         <p>(displaying {locations.length} results)</p>
         <p>via FourSquare!</p>
-        <ul>
-          {
-            locations.map(loc => (
-              <li key={loc.venue.id}>
-                <p onClick={() => this.props.showInfo(loc)}>{loc.venue.name}</p>
-                <p>{loc.venue.location.address}</p>
-              </li>
-            ))
-          }
-        </ul>
+        { (locations === "Your search cannot be completed due to an error" ? <p>{locations}</p> :
+          <ul>
+            {
+              locations.map(loc => (
+                <li key={loc.venue.id}>
+                  <p onClick={() => this.props.showInfo(loc)}>{loc.venue.name}</p>
+                  <p>{loc.venue.location.address}</p>
+                </li>
+              ))
+            }
+          </ul>)
+        }
+
       </div>
     );
   }
