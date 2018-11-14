@@ -17,15 +17,24 @@ export default class Content extends React.Component {
   }
 
   handleClick = (loc) => {
-    console.log(loc);
+    // console.log(loc);
     for (let x in window.markers) {
-      console.log(window.markers[x].title, loc.venue.name);
+      // console.log(window.markers[x].title, loc.venue.name);
       if (window.markers[x].title === loc.venue.name) {
         console.log('match');
         let infoWin = new window.google.maps.InfoWindow({
           content: `<div><a href="#">${loc.venue.name}</a>
                   <p>${loc.venue.location.address}</p></div>`
         });
+
+        let toggleBounce = (marker) => {
+          if (marker.getAnimation() !== null) {
+            marker.setAnimation(null);
+          } else {
+            marker.setAnimation(window.google.maps.Animation.BOUNCE);
+          }
+        }
+
         if (this.state.openWindows) {
           console.log('you have an open window, better shut it!', this.state.openWindows);
           this.closeInfWindow(this.state.openWindows);
@@ -38,6 +47,7 @@ export default class Content extends React.Component {
           showingConInfoWindow: true
         });
         infoWin.open(window.google.maps, window.markers[x]);
+        toggleBounce(window.markers[x]);
 
         break;
       }
