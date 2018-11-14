@@ -11,6 +11,7 @@ class MapDisplay extends React.Component {
       locMarkers: [],
       locMarkerProps: [],
       activeMarker: null,
+      activeMarkerWindow: null,
       activeMarkerProps: null,
       showingInfoWindow: false,
       locations: this.props.locations
@@ -82,6 +83,8 @@ class MapDisplay extends React.Component {
       // }
 
       marker.addListener('click', () => {
+
+
         this.onMarkerClick(locMarkerProps, marker, m, null);
         // toggleBounce();
       });
@@ -95,27 +98,59 @@ class MapDisplay extends React.Component {
   }
 
   onMarkerClick = (props, marker, map, e) => {
-    // Close all open infoWindows
-    this.closeInfoWindow();
-
-    console.log('marker clicked:', marker.title);
-
-    let infowindow = new this.props.google.maps.InfoWindow({
-      content: marker.title
-    });
-
-    infowindow.open(map, marker);
-
-    this.setState({
-      showingInfoWindow: true,
-      activeMarker: marker,
-      activeMarkerProps: props
-    });
+    console.log('Marker click event:');
+    // see if there is an open infoWindow
+    if(this.state.showingInfoWindow) {
+      console.log('There is already an infoWindow open!');
+      // if there is an open infoWindow
+      // check to see if the marker that is showing is the same marker that you just clicked
+      if(this.state.activeMarker !== marker) {
+        console.log('You clicked a different marker!');
+        // if the marker you just clicked is not the same marker that already has an infoWindow open, close the currently open infoWindow and open a new infoWindow for the marker that was just clicked
+        this.closeInfoWindow(this.state.activeMarkerWindow);
+        // create a new infoWindow
+        let infowindow = new this.props.google.maps.InfoWindow({
+          content: marker.title
+        });
+        console.log('infowindow created:', infowindow);
+        // set the current state to show the current active marker
+        this.setState({
+          showingInfoWindow: true,
+          activeMarker: marker,
+          activeMarkerWindow: infowindow,
+          activeMarkerProps: props
+        });
+        // open the new infoWindow
+        infowindow.open(map, marker);
+      } else {
+        console.log('You clicked the same marker twice in a row!');
+        this.closeInfoWindow(this.state.activeMarkerWindow);
+      }
+    } else {
+      console.log('Here should be the first infoWindow.')
+      // if there is currently no infoWindow open, create a new one
+      let infowindow = new this.props.google.maps.InfoWindow({
+        content: marker.title
+      });
+      console.log('infowindow created:', infowindow);
+      // set the current state to show the current active marker
+      this.setState({
+        showingInfoWindow: true,
+        activeMarker: marker,
+        activeMarkerWindow: infowindow,
+        activeMarkerProps: props
+      });
+      // open the new infoWindow
+      infowindow.open(map, marker);
+    }
   }
 
-  closeInfoWindow = () => {
+  closeInfoWindow = (window) => {
   // Disable any active marker
     this.state.activeMarker && this.state.activeMarker.setAnimation(null);
+    // close the open infoWindow
+    window.close();
+    // set the state to reflect that there is no infoWindow open currently
     this.setState({
       showingInfoWindow: false,
       activeMarker: null,
