@@ -38,7 +38,7 @@ class MapDisplay extends React.Component {
   }
 
   updateMarkers = (locations, locate, m) => {
-    if ((locate != locations) || (this.state.locations !== "Your search cannot be completed due to an error")) {
+    if ((locate != locations) || (locations !== "Your search cannot be completed due to an error")) {
       // if (!locations) {
       //   // return;
       //   LocationsAPI.getLocations()
@@ -52,63 +52,69 @@ class MapDisplay extends React.Component {
 
       // create two lists, locMarkerProps and locMarkers, where for each location, a marker object is created with the properties of that marker (locProps), an animation, and a click eventListener
       let locMarkerProps = [];
-      let locMarkers = locations.map((location, index) => {
-        let locProps = {
-          key: index,
-          index,
-          name: location.venue.name,
-          position: {
-            lat: location.venue.location.lat,
-            lng: location.venue.location.lng
-          },
-          url: null
-        };
-        // console.log(locProps);
-        // add the props to the locMarkerProps list
-        locMarkerProps.push(locProps);
 
-        // let defaultAnimation = this.props.google.maps.Animation.DROP;
-        let marker = new this.props.google.maps.Marker({
-          position: {
-            lat: location.venue.location.lat,
-            lng: location.venue.location.lng
-          },
-          map: this.state.map,
-          title: location.venue.name,
-          address: location.venue.location.address,
-          id: location.venue.id
-        });
+      if (locations !== "Your search cannot be completed due to an error") {
+        let locMarkers = locations.map((location, index) => {
+          let locProps = {
+            key: index,
+            index,
+            name: location.venue.name,
+            position: {
+              lat: location.venue.location.lat,
+              lng: location.venue.location.lng
+            },
+            url: null
+          };
+          // console.log(locProps);
+          // add the props to the locMarkerProps list
+          locMarkerProps.push(locProps);
 
-        marker.setAnimation(this.props.google.maps.Animation.DROP);
-        // console.log(marker);
+          // let defaultAnimation = this.props.google.maps.Animation.DROP;
+          let marker = new this.props.google.maps.Marker({
+            position: {
+              lat: location.venue.location.lat,
+              lng: location.venue.location.lng
+            },
+            map: this.state.map,
+            title: location.venue.name,
+            address: location.venue.location.address,
+            id: location.venue.id
+          });
+
+          marker.setAnimation(this.props.google.maps.Animation.DROP);
+          // console.log(marker);
 
 
-        let toggleBounce = (marker) => {
-          if (marker.getAnimation() !== null) {
-            marker.setAnimation(null);
-          } else {
-            marker.setAnimation(this.props.google.maps.Animation.BOUNCE);
+          let toggleBounce = (marker) => {
+            if (marker.getAnimation() !== null) {
+              marker.setAnimation(null);
+            } else {
+              marker.setAnimation(this.props.google.maps.Animation.BOUNCE);
+            }
           }
-        }
 
-        marker.addListener('click', () => {
+          marker.addListener('click', () => {
 
 
-          this.onMarkerClick(locMarkerProps, marker, m, null);
-          toggleBounce(marker);
+            this.onMarkerClick(locMarkerProps, marker, m, null);
+            toggleBounce(marker);
+          });
+
+          // console.log(marker);
+          return marker;
+        })
+
+        this.setState({
+          locMarkers,
+          locMarkerProps,
+          locate: locations
         });
 
-        // console.log(marker);
-        return marker;
-      })
+        window.markers = locMarkers;
 
-      this.setState({
-        locMarkers,
-        locMarkerProps,
-        locate: locations
-      });
+      }
 
-      window.markers = locMarkers;
+
     } else {
       return;
     }
