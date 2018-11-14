@@ -13,6 +13,7 @@
   background-color: lightgrey;
   z-index: 1;
   position: absolute;
+  overflow: scroll;
 }
 
 #list ul {
