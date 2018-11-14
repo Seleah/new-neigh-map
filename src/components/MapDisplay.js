@@ -177,9 +177,9 @@ class MapDisplay extends React.Component {
 
   render = () => {
     const style = {
-      width: '75%',
+      width: '60%',
       height: 'calc(100vh - 77px)',
-      transform: 'translateX(25vw)',
+      transform: 'translateX(40vw)',
     }
 
     const center = {

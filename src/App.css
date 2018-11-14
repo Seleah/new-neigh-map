@@ -34,17 +34,24 @@ h1 {
 }
 
 #list {
-  width: 25%;
+  width: 40%;
   height: inherit;
   background-color: lightgrey;
   z-index: 1;
   position: absolute;
   overflow: scroll;
+  align-content: center;
+}
+
+#list p {
+  margin: 10px;
 }
 
 #list ul {
   list-style: none;
   text-align: left;
+  width: 80%;
+  margin: auto;
 }
 
 #list ul li {
@@ -58,4 +65,18 @@ h1 {
 /*#content {
   display: flex;
   flex: row wrap;
+}*/
+
+/*@media screen and (max-width: 775px) {
+  #list {
+    width: 40%;
+    height: inherit;
+    background-color: lightgrey;
+    z-index: 1;
+    position: absolute;
+    overflow: scroll;
+  }
+  #map {
+    width: 60% !important;
+  }
 }*/
