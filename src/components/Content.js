@@ -12,14 +12,15 @@ export default class Content extends React.Component {
     openWindows: null,
     activeConMarker: null,
     activeConMarkerProps: null,
-    showingConInfoWindow: false
+    showingConInfoWindow: false,
+    query: ''
   }
 
   handleClick = (loc) => {
     console.log(loc);
     for (let x in window.markers) {
       console.log(window.markers[x].title, loc.venue.name);
-      if (window.markers[x].title == loc.venue.name) {
+      if (window.markers[x].title === loc.venue.name) {
         console.log('match');
         let infoWin = new window.google.maps.InfoWindow({
           content: `<div><a href="#">${loc.venue.name}</a>
@@ -67,12 +68,21 @@ export default class Content extends React.Component {
     .then(resp => this.setState({ locations: resp }));
   }
 
+  handleQueryChange = (queryNew) => {
+    this.setState({ query: queryNew });
+    LocationsAPI.getLocations(this.state.query)
+    .then(resp => this.setState({ locations: resp }));
+    console.log(this.state.query);
+  }
+
   render = () => {
     return (
       <div id="content">
         <List
           locations={this.state.locations}
-          showInfo={this.handleClick} />
+          showInfo={this.handleClick}
+          querySearch={this.state.query}
+          handleChange={this.handleQueryChange}/>
         <MapDisplay
           openWindows={this.state.openWindows}
           activeConMarker={this.state.activeConMarker}

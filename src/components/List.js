@@ -8,7 +8,7 @@ export default class List extends React.Component {
     return (
       <div id="list">
         <h2>Locations</h2>
-        <input type="text"/>
+        <input type="text" value={this.props.querySearch} onChange={(e) => this.props.handleChange(e.target.value)}/>
         <ul>
           {
             locations.map(loc => (
