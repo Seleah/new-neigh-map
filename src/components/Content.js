@@ -7,7 +7,7 @@ export default class Content extends React.Component {
   state = {
     lat: 45.52345,
     lon: -122.67621,
-    zoom: 13,
+    zoom: 12.5,
     locations: [],
     openWindows: null,
     activeConMarker: null,
