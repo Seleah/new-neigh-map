@@ -1,6 +1,6 @@
 import React from 'react';
-import {Map, GoogleApiWrapper, Marker} from 'google-maps-react';
-import * as LocationsAPI from '../api/Locations';
+import {Map, GoogleApiWrapper} from 'google-maps-react';
+// import * as LocationsAPI from '../api/Locations';
 
 const MAP_KEY = "AIzaSyCc2VyH-lnIua2RIpDWV0R1ApxNv-T9jyo";
 
@@ -67,7 +67,7 @@ class MapDisplay extends React.Component {
         // add the props to the locMarkerProps list
         locMarkerProps.push(locProps);
 
-        let defaultAnimation = this.props.google.maps.Animation.DROP;
+        // let defaultAnimation = this.props.google.maps.Animation.DROP;
         let marker = new this.props.google.maps.Marker({
           position: {
             lat: location.venue.location.lat,
@@ -76,25 +76,26 @@ class MapDisplay extends React.Component {
           map: this.state.map,
           title: location.venue.name,
           address: location.venue.location.address,
-          id: location.venue.id,
-          defaultAnimation
+          id: location.venue.id
         });
+
+        marker.setAnimation(this.props.google.maps.Animation.DROP);
         // console.log(marker);
 
 
-        // let toggleBounce = () => {
-        //   if (marker.getAnimation() !== null) {
-        //     marker.setAnimation(null);
-        //   } else {
-        //     marker.setAnimation(this.props.google.maps.Animation.BOUNCE);
-        //   }
-        // }
+        let toggleBounce = (marker) => {
+          if (marker.getAnimation() !== null) {
+            marker.setAnimation(null);
+          } else {
+            marker.setAnimation(this.props.google.maps.Animation.BOUNCE);
+          }
+        }
 
         marker.addListener('click', () => {
 
 
           this.onMarkerClick(locMarkerProps, marker, m, null);
-          // toggleBounce();
+          toggleBounce(marker);
         });
 
         // console.log(marker);
@@ -114,6 +115,14 @@ class MapDisplay extends React.Component {
 
   onMarkerClick = (props, marker, map, e) => {
     console.log('Marker click event:', marker);
+    // if(this.state.activeMarker == marker) {
+    //   this.state.activeMarker.setAnimation(null);
+    //   marker.setAnimation(this.props.google.maps.Animation.BOUNCE);
+    //   this.setState({
+    //     showingInfoWindow: true,
+    //     activeMarker: marker,
+    //     activeMarkerProps: props});
+    // }
     // see if there is an open infoWindow
     if((this.state.showingInfoWindow) || (this.props.showingConInfoWindow)) {
       console.log('There is already an infoWindow open!');
@@ -130,6 +139,8 @@ class MapDisplay extends React.Component {
         });
         console.log('infowindow created:', infowindow);
         // set the current state to show the current active marker
+        // marker.setAnimation(null);
+        // marker.setAnimation(1);
         this.setState({
           showingInfoWindow: true,
           activeMarker: marker,
@@ -161,6 +172,17 @@ class MapDisplay extends React.Component {
       infowindow.open(map, marker);
     }
   }
+
+  // if (this.state.activeMarker) {
+  //   this.state.activeMarker.setAnimation(null);
+  //   marker.setAnimation(this.props.google.maps.Animation.BOUNCE);
+  //   this.setState({showingInfoWindow: true, activeMarker: marker, activeMarkerProps});
+  // }
+
+
+  // changeMarkerColor = (marker) => {
+
+  // }
 
   closeInfoWindow = (inwindow) => {
   // Disable any active marker
