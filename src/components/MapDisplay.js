@@ -69,6 +69,7 @@ class MapDisplay extends React.Component {
         },
         map: this.state.map,
         title: location.venue.name,
+        address: location.venue.location.address,
         defaultAnimation
       });
       console.log(marker);
@@ -98,7 +99,7 @@ class MapDisplay extends React.Component {
   }
 
   onMarkerClick = (props, marker, map, e) => {
-    console.log('Marker click event:');
+    console.log('Marker click event:', marker);
     // see if there is an open infoWindow
     if(this.state.showingInfoWindow) {
       console.log('There is already an infoWindow open!');
@@ -110,7 +111,8 @@ class MapDisplay extends React.Component {
         this.closeInfoWindow(this.state.activeMarkerWindow);
         // create a new infoWindow
         let infowindow = new this.props.google.maps.InfoWindow({
-          content: marker.title
+          content: `<div><a href="#">${marker.title}</a>
+                <p>${marker.address}</p></div>`
         });
         console.log('infowindow created:', infowindow);
         // set the current state to show the current active marker
@@ -130,7 +132,8 @@ class MapDisplay extends React.Component {
       console.log('Here should be the first infoWindow.')
       // if there is currently no infoWindow open, create a new one
       let infowindow = new this.props.google.maps.InfoWindow({
-        content: marker.title
+        content: `<div><a href="#">${marker.title}</a>
+                <p>${marker.address}</p></div>`
       });
       console.log('infowindow created:', infowindow);
       // set the current state to show the current active marker
