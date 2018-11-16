@@ -1,9 +1,5 @@
 @charset "utf-8";
 
-/** {
-  box-sizing: border-box;
-}*/
-
 html, body {
   height: 100vh;
   margin: 0;
@@ -61,22 +57,3 @@ h1 {
 #list ul li p {
   margin: 0;
 }
-
-/*#content {
-  display: flex;
-  flex: row wrap;
-}*/
-
-/*@media screen and (max-width: 775px) {
-  #list {
-    width: 40%;
-    height: inherit;
-    background-color: lightgrey;
-    z-index: 1;
-    position: absolute;
-    overflow: scroll;
-  }
-  #map {
-    width: 60% !important;
-  }
-}*/

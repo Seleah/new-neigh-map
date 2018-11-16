@@ -14,7 +14,7 @@ export const getLocations = (query) => {
 	// let fallbackLoc = locations.json();
 	let fallback = "Your search cannot be completed due to an error";
 
-	return fetch(fsUrl2)
+	return fetch(fsUrl)
 	.then(resp => resp.json())
 	.then(result => result.response.groups[0].items)
 	.catch((er) => {return fallback;});

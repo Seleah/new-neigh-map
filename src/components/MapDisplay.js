@@ -6,54 +6,50 @@ const MAP_KEY = "AIzaSyCc2VyH-lnIua2RIpDWV0R1ApxNv-T9jyo";
 
 class MapDisplay extends React.Component {
   state = {
-  // initialize map
-      map: null,
-      locMarkers: [],
-      locMarkerProps: [],
-      activeMarker: null,
-      activeMarkerWindow: null,
-      activeMarkerProps: null,
-      showingInfoWindow: false,
-      // locations: this.props.locations
-      locate: []
+    map: null,
+    locMarkers: [],
+    locMarkerProps: [],
+    activeMarker: null,
+    activeMarkerWindow: null,
+    activeMarkerProps: null,
+    showingInfoWindow: false,
+    locate: []
   };
 
   componentDidMount = () => {
   }
 
-  // code snippet partially from Doug Brown, Project Coach after a plea for help via Slack. Thanks so much!!
+  // code snippet from Doug Brown, Project Coach after a plea for help via Slack.
+  // Thanks so much!!
   componentWillReceiveProps = props => {
     if (this.state.locate !== props.locations) {
-
       this.updateMarkers(props.locations, this.locate, this.state.map);
     }
   }
 
   mapReady = (props, map) => {
-    // console.log(this.props.locations);
     this.setState({map});
-
     this.updateMarkers(this.props.locations, map);
     window.mapObject = map;
   }
 
   updateMarkers = (locations, locate, m) => {
     if ((locate != locations) || (locations !== "Your search cannot be completed due to an error")) {
-      // if (!locations) {
-      //   // return;
-      //   LocationsAPI.getLocations()
-      //   .then(resp => this.setState({ locations: resp }));
-      // }
 
       console.log('These are the locations sent to updateMarkers()', locations);
 
       // For any existing markers remove them from the map
       this.state.locMarkers.forEach(marker => marker.setMap(null));
 
-      // create two lists, locMarkerProps and locMarkers, where for each location, a marker object is created with the properties of that marker (locProps), an animation, and a click eventListener
+      // create two lists, locMarkerProps and locMarkers, where for each location,
+      // a marker object is created with the properties of that marker (locProps),
+      // an animation, and a click eventListener
       let locMarkerProps = [];
 
+      // check that foursquare request returned a list of location objects
       if (locations !== "Your search cannot be completed due to an error") {
+        // if no error, proceed with creating the markers
+
         let locMarkers = locations.map((location, index) => {
           let locProps = {
             key: index,
@@ -65,11 +61,10 @@ class MapDisplay extends React.Component {
             },
             url: null
           };
-          // console.log(locProps);
+
           // add the props to the locMarkerProps list
           locMarkerProps.push(locProps);
 
-          // let defaultAnimation = this.props.google.maps.Animation.DROP;
           let marker = new this.props.google.maps.Marker({
             position: {
               lat: location.venue.location.lat,
@@ -82,26 +77,14 @@ class MapDisplay extends React.Component {
           });
 
           marker.setAnimation(this.props.google.maps.Animation.DROP);
-          // console.log(marker);
-
-
-          let toggleBounce = (marker) => {
-            if (marker.getAnimation() !== null) {
-              marker.setAnimation(null);
-            } else {
-              marker.setAnimation(this.props.google.maps.Animation.BOUNCE);
-            }
-          }
 
           marker.addListener('click', () => {
-
-
             this.onMarkerClick(locMarkerProps, marker, m, null);
-            toggleBounce(marker);
+            // this.toggleBounce(marker); << I don't think this would work for markers triggered by list click, but I could be wrong
           });
 
-          // console.log(marker);
           return marker;
+
         })
 
         this.setState({
@@ -114,95 +97,147 @@ class MapDisplay extends React.Component {
 
       }
 
-
     } else {
+      // if there was an error in the foursquare request, exit
       return;
     }
 
   }
 
   onMarkerClick = (props, marker, map, e) => {
-    console.log('Marker click event:', marker);
-    // if(this.state.activeMarker == marker) {
-    //   this.state.activeMarker.setAnimation(null);
-    //   marker.setAnimation(this.props.google.maps.Animation.BOUNCE);
-    //   this.setState({
-    //     showingInfoWindow: true,
-    //     activeMarker: marker,
-    //     activeMarkerProps: props});
-    // }
-    // see if there is an open infoWindow
-    if((this.state.showingInfoWindow) || (this.props.showingConInfoWindow)) {
-      console.log('There is already an infoWindow open!');
-      // if there is an open infoWindow
-      // check to see if the marker that is showing is the same marker that you just clicked
-      if(this.state.activeMarker !== marker) {
-        console.log('You clicked a different marker!');
-        // if the marker you just clicked is not the same marker that already has an infoWindow open, close the currently open infoWindow and open a new infoWindow for the marker that was just clicked
-        this.closeInfoWindow(this.state.activeMarkerWindow);
-        // create a new infoWindow
-        let infowindow = new this.props.google.maps.InfoWindow({
-          content: `<div><a href="#">${marker.title}</a>
-                <p>${marker.address}</p></div>`
-        });
-        console.log('infowindow created:', infowindow);
-        // set the current state to show the current active marker
-        // marker.setAnimation(null);
-        // marker.setAnimation(1);
-        this.setState({
-          showingInfoWindow: true,
-          activeMarker: marker,
-          activeMarkerWindow: infowindow,
-          activeMarkerProps: props
-        });
-        // open the new infoWindow
-        infowindow.open(map, marker);
+    // Marker has been clicked.
+
+    // Check to see if a marker has already been triggered on the map.
+    // If so, close it.
+    if ((this.state.activeMarker) || (this.props.activeConMarker)) {
+      // If yes, check to see how to properly handle the window that was previously open.
+
+      // if (the marker is the same as the one that is already open)
+      if ((this.state.activeMarker === marker) || (this.props.activeConMarker === marker)) {
+        // close the marker.
+
+        if (this.state.activeMarker) {
+          // If the marker was triggered by clicking on the marker itself on the
+          // map, use the appropriate function, found in `this`.
+
+          this.closeInfoWindow(this.state.activeMarkerWindow, this.state.activeMarker);
+
+        } else if (this.props.activeConMarker) {
+          // If the marker was triggered by clicking on a list item, use the
+          // appropriate function, which was passed in `this.props`.
+
+          this.props.closeConMark(this.props.openWindow, this.props.activeConMarker);
+
+        }
+
       } else {
-        console.log('You clicked the same marker twice in a row!');
-        this.closeInfoWindow(this.state.activeMarkerWindow);
+        // the marker that was just triggered is not the same as the one that is already open.
+        // close the previously triggered marker and open the new one.
+
+        // if (the marker that is currently open was opened by list click) {
+        if (this.props.activeConMarker) {
+
+          this.props.closeConMark(this.props.openWindow, this.props.activeConMarker);
+
+        } else {
+        // in this case, the marker that is currently open was opened by directly clicking the marker on the map
+
+          this.closeInfoWindow(this.state.activeMarkerWindow, this.state.activeMarker);
+
+        }
+
+        this.openInfoWindow(props, map, marker);
       }
+
     } else {
-      console.log('Here should be the first infoWindow.')
-      // if there is currently no infoWindow open, create a new one
-      let infowindow = new this.props.google.maps.InfoWindow({
-        content: `<div><a href="#">${marker.title}</a>
-                <p>${marker.address}</p></div>`
-      });
-      console.log('infowindow created:', infowindow);
-      // set the current state to show the current active marker
-      this.setState({
-        showingInfoWindow: true,
-        activeMarker: marker,
-        activeMarkerWindow: infowindow,
-        activeMarkerProps: props
-      });
-      // open the new infoWindow
-      infowindow.open(map, marker);
+      // If no markers were currently open, open a new one.
+
+      this.openInfoWindow(props, map, marker);
     }
+
   }
 
-  // if (this.state.activeMarker) {
-  //   this.state.activeMarker.setAnimation(null);
-  //   marker.setAnimation(this.props.google.maps.Animation.BOUNCE);
-  //   this.setState({showingInfoWindow: true, activeMarker: marker, activeMarkerProps});
-  // }
+  // ===========================================================================
+  // TODO:
+  // >> Check openInfoWindow().
+  //    Current description of how the function should work is accurate as of now.
+  // >> Work on this.props.closeConMark().
+  //    It needs to work in basically the same way as this.closeInfoWindow()
+  // ===========================================================================
 
+  openInfoWindow = (props, map, marker) => {
+    // This function will:
+    // >> create an infoWindow,
+    // >> set it's properties
+    // >> open it,
+    // >> setState
+    // >> toggleBounce()
+    // >> send the active marker and the open window up to the window object so
+    //    it can be accessed by the Content component
 
-  // changeMarkerColor = (marker) => {
+    // Note: This function will be triggered when a new marker is clicked on the map,
+    // regardless if one was opened previously, whether it would have been opened
+    // by clicking a marker or a list item
 
-  // }
-
-  closeInfoWindow = (inwindow) => {
-  // Disable any active marker
-    this.props.activeMarker && this.props.activeMarker.setAnimation(null);
-    // close the open infoWindow
-    inwindow.close();
-    // set the state to reflect that there is no infoWindow open currently
-    this.setState({
-      showingInfoWindow: false,
-      activeMarker: null,
-      activeMarkerProps: null
+    let infowindow = new this.props.google.maps.InfoWindow({
+      content: `<div><a href="#">${marker.title}</a>
+            <p>${marker.address}</p></div>`
     });
+
+    infowindow.open(map, marker);
+
+    this.setState({
+      showingInfoWindow: true,
+      activeMarker: marker,
+      activeMarkerWindow: infowindow,
+      activeMarkerProps: props
+    });
+
+    this.toggleBounce(marker);
+
+    window.activeMapMarker = marker;
+    window.activeMapWindow = infowindow;
+
+    console.log(window.activeMapMarker);
+    console.log(window.activeMapWindow);
+
+  }
+
+  closeInfoWindow = (inwindow, marker) => {
+    // This function will:
+    // >> toggleBounce
+    // >> setState
+    // >> close inWindow
+    // >> set window.activeMapMarker to null
+
+    this.setState({
+      activeMarker: null,
+      activeMarkerWindow: null,
+      activeMarkerProps: null,
+      showingInfoWindow: false
+    });
+
+    this.toggleBounce(marker);
+
+    inwindow.close();
+
+    window.activeMapMarker = null;
+    window.activeMapWindow = null;
+
+  }
+
+  toggleBounce = (mark) => {
+    // This function will remove any animation if there is one set
+    // (whether it is DROP or BOUNCE)
+    // or add a BOUNCE animation.
+
+    // It is called after the markers drop, to stop the animation, and every
+    // time a marker is triggered, to add or remove BOUNCE animation
+    if (mark.getAnimation() == this.props.google.maps.Animation.BOUNCE) {
+      mark.setAnimation(null);
+    } else {
+      mark.setAnimation(this.props.google.maps.Animation.BOUNCE);
+    }
   }
 
   render = () => {
@@ -227,18 +262,12 @@ class MapDisplay extends React.Component {
         role="application"
         aria-label="map"
         onReady={this.mapReady}
-        onClick={() => {if(this.state.activeMarkerWindow) {this.closeInfoWindow(this.state.activeMarkerWindow)}}} />
-
-
-        // <Marker onClick={this.onMarkerClick}
-        //         name={'Current location'} />
-
-        // <InfoWindow onClose={this.onInfoWindowClose}>
-        //     <div>
-        //       <h1>{this.state.selectedPlace.name}</h1>
-        //     </div>
-        // </InfoWindow>
-      // </Map>
+        onClick={() => {
+          if(this.state.activeMarkerWindow) {
+            this.closeInfoWindow(this.state.activeMarkerWindow, this.state.activeMarker)
+          }
+        }}
+      />
     );
   }
 }
