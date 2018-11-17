@@ -33,7 +33,7 @@ export default class NoMapDisplay extends React.Component {
           this.state.showingErr ? (
 
             <div id="err">
-              <span><img src={homer}/></span>
+              <span><img src={homer} alt="homer-simpson-d'oh"/></span>
               <span>
                 <div>
                   <h2>Error loading map</h2>
