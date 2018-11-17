@@ -1,5 +1,6 @@
 import React from 'react';
 import {Map, GoogleApiWrapper} from 'google-maps-react';
+import NoMapAlt from './NoMapAlt';
 // import * as LocationsAPI from '../api/Locations';
 
 const MAP_KEY = "AIzaSyCc2VyH-lnIua2RIpDWV0R1ApxNv-T9jyo";
@@ -273,5 +274,6 @@ class MapDisplay extends React.Component {
 }
 
 export default GoogleApiWrapper({
-    apiKey: MAP_KEY
+    apiKey: MAP_KEY,
+    LoadingContainer: NoMapAlt
 })(MapDisplay);
