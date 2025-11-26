@@ -35,7 +35,7 @@ class MapDisplay extends React.Component {
   }
 
   updateMarkers = (locations, locate, m) => {
-    if ((locate != locations) || (locations !== "Your search cannot be completed due to an error")) {
+    if ((locate !== locations) || (locations !== "Your search cannot be completed due to an error")) {
 
       console.log('These are the locations sent to updateMarkers()', locations);
 
@@ -234,7 +234,7 @@ class MapDisplay extends React.Component {
 
     // It is called after the markers drop, to stop the animation, and every
     // time a marker is triggered, to add or remove BOUNCE animation
-    if (mark.getAnimation() == this.props.google.maps.Animation.BOUNCE) {
+    if (mark.getAnimation() === this.props.google.maps.Animation.BOUNCE) {
       mark.setAnimation(null);
     } else {
       mark.setAnimation(this.props.google.maps.Animation.BOUNCE);

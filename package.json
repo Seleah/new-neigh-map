@@ -3,11 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "eslint": "^8.57.1",
+    "file-entry-cache": "^11.1.0",
+    "flat-cache": "^6.1.18",
+    "glob": "^10.4.5",
     "google-map-react": "^1.1.0",
     "google-maps-react": "^2.0.2",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "rimraf": "^6.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -23,5 +28,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "eslint-config-react-app": "^7.0.1"
+  }
 }
